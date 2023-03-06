@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1081189224694",
+    "project_id": "app1-kingprime",
+    "storage_bucket": "app1-kingprime.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1081189224694:android:0e25dfc475d5f05ca65cd7",
+        "android_client_info": {
+          "package_name": "com.kingprime.app1"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1081189224694-mobebsqp54rcpfnbkjmdcuk1oaopdmqg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQl4pIJIT1GD_EZKvax-rbQYH_NO3jrr4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1081189224694-mobebsqp54rcpfnbkjmdcuk1oaopdmqg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
