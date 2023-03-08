@@ -1,21 +1,20 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class LoginView extends StatefulWidget {
-  const LoginView({super.key});
+
+
+class RegisterView extends StatefulWidget {
+  const RegisterView({super.key});
 
   @override
-  State<LoginView> createState() => _LoginViewState(); // written to convert HomePage to stateful widget as we wanr to work with the mutable data in the text field
+  State<RegisterView> createState() => _RegisterViewState();
 }
 
-
-
-class _LoginViewState extends State<LoginView> {
-
+class _RegisterViewState extends State<RegisterView> {
   late final TextEditingController _email;
-  late final TextEditingController _password;
+   late final TextEditingController _password;
 
-  @override
+   @override
   void initState() {    // this function is used here to assign the values to the late variables
     _email = TextEditingController();
     _password = TextEditingController();
@@ -31,9 +30,9 @@ class _LoginViewState extends State<LoginView> {
 
   @override
   Widget build(BuildContext context) {
-     return Scaffold(
-      appBar:AppBar(title:const Center(child:  Text("Login Window")),),
-       body: Column(
+    return Scaffold(
+      appBar: AppBar(title:const Center(child: Text("Registeration Window"))),
+      body: Column(
         children: [
           TextField(
             controller:_email,
@@ -51,34 +50,33 @@ class _LoginViewState extends State<LoginView> {
           ),
           TextButton(
             onPressed: () async {
+              
               final email = _email.text;
               final password = _password.text;
               try {
-                final userCredential =  await FirebaseAuth.instance.signInWithEmailAndPassword(
+                final userCredential =  await FirebaseAuth.instance.createUserWithEmailAndPassword(
                 email: email,
                 password: password);
               print(userCredential);
-              } 
-              on FirebaseAuthException catch (e){ //used to catch specified exception
-                print("Failed to authenticate!");
-                print(e.code);  //to get the error code ie. specific error inside the FirebasAuthException
+              } on FirebaseAuthException catch (e) {
+                if(e.code=="email-already-in-use"){
+                  print("An account exists with this email id , pls login!!");
+                }
+                else if(e.code=="invalid-email"){
+                  print("Invalid email");
+                }
+                
               }
-              catch (e) {
-                print("Invalid User");
-                print(e); 
-                print(e.runtimeType); 
-              }
-              
+    
               
             },
-            child:const Text("Login"),),
-          TextButton(onPressed:() {
-            Navigator.of(context).pushNamedAndRemoveUntil("/register/", (route) => false);
-          },
-           child: const Text("Register Here"),)
+            child:const Text("Register"),),
+            TextButton(onPressed: (){
+              Navigator.of(context).pushNamedAndRemoveUntil("/login/", (route) => false);
+            },
+            child: const Text("Already Registered? Login Here"),),
         ],
-         ),
-     );
+      ),
+    );
   }
-   
 }
