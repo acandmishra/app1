@@ -58,6 +58,7 @@ class _LoginViewState extends State<LoginView> {
                 email: email,
                 password: password);
               print(userCredential);
+              Navigator.of(context).pushNamedAndRemoveUntil("/notes/", (route) => false);
               } 
               on FirebaseAuthException catch (e){ //used to catch specified exception
                 print("Failed to authenticate!");
@@ -70,9 +71,10 @@ class _LoginViewState extends State<LoginView> {
               }
               
               
+              
             },
             child:const Text("Login"),),
-          TextButton(onPressed:() {
+            TextButton(onPressed:() {
             Navigator.of(context).pushNamedAndRemoveUntil("/register/", (route) => false);
           },
            child: const Text("Register Here"),)
