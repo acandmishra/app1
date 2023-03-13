@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
+import 'dart:developer' as devtools show log;
 
 
 class RegisterView extends StatefulWidget {
@@ -57,13 +57,14 @@ class _RegisterViewState extends State<RegisterView> {
                 final userCredential =  await FirebaseAuth.instance.createUserWithEmailAndPassword(
                 email: email,
                 password: password);
-              print(userCredential);
+                Navigator.of(context).pushNamedAndRemoveUntil("/login/", (route) => false);
+                devtools.log(userCredential.toString());
               } on FirebaseAuthException catch (e) {
                 if(e.code=="email-already-in-use"){
-                  print("An account exists with this email id , pls login!!");
+                  devtools.log("An account exists with this email id , pls login!!");
                 }
                 else if(e.code=="invalid-email"){
-                  print("Invalid email");
+                  devtools.log("Invalid email");
                 }
                 
               }

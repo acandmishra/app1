@@ -40,6 +40,7 @@ class HomePage extends StatelessWidget {
 
                   }
                   else{
+                    
                     return const VerifyEmailView();
                   }
                 }
