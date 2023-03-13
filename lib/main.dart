@@ -95,7 +95,7 @@ class _NotesViewState extends State<NotesView> {
                 Navigator.of(context).pushNamedAndRemoveUntil(loginRoute, (route) => false);
               }
           }
-
+          
             devtools.log(value.toString()); // log is used instead of print command
         }, itemBuilder: (context) {
           return const [PopupMenuItem<MenuAction>(
@@ -109,7 +109,7 @@ class _NotesViewState extends State<NotesView> {
   }
 }
 
-Future<bool>showLogOutDialog(BuildContext context){
+  Future<bool>showLogOutDialog(BuildContext context){
   return showDialog<bool>(context: context, builder: (context){
     return AlertDialog(
       title:const Text("Sign Out"),

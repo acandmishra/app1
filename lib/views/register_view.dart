@@ -64,6 +64,9 @@ class _RegisterViewState extends State<RegisterView> {
                 if(e.code=="email-already-in-use"){
                   devtools.log("An account exists with this email id , pls login!!");
                 }
+                else if (e.code=="weak-password"){
+                  devtools.log("Weak-Password");
+                }
                 else if(e.code=="invalid-email"){
                   devtools.log("Invalid email");
                 }
@@ -73,7 +76,7 @@ class _RegisterViewState extends State<RegisterView> {
               
             },
             child:const Text("Register"),),
-            
+
             TextButton(onPressed: (){
               Navigator.of(context).pushNamedAndRemoveUntil(loginRoute, (route) => false);
             },

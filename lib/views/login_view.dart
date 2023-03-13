@@ -2,6 +2,9 @@ import 'package:app1/constants/routes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'dart:developer' as devtools show log;
+import '../utilities/show_error_dialog.dart';
+
+
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -34,7 +37,7 @@ class _LoginViewState extends State<LoginView> {
   @override
   Widget build(BuildContext context) {
      return Scaffold(
-      appBar:AppBar(title:const Center(child:  Text("Login Window")),),
+      appBar:AppBar(title:const Center(child:  Text("Login")),),
        body: Column(
         children: [
           TextField(
@@ -62,15 +65,23 @@ class _LoginViewState extends State<LoginView> {
               devtools.log(userCredential.toString());
               Navigator.of(context).pushNamedAndRemoveUntil(notesRoute, (route) => false,);
               } 
-              on FirebaseAuthException catch (e){ //used to catch specified exception
-                
+              on FirebaseAuthException catch (e) { //used to catch specified exception
+                if(e.code=="wrong-password"){
+                  await showErrorDialog(context,"Wrong Password");
                 devtools.log("Failed to authenticate!");
-                devtools.log(e.code.toString());  //to get the error code ie. specific error inside the FirebasAuthException
+                devtools.log(password);
+                devtools.log(e.code.toString());}
+                 //to get the error code ie. specific error inside the FirebasAuthException
+                else if (e.code=="user-not-found"){
+                  await showErrorDialog(context,"User Not Found");   
+                }
+                else{
+                  await showErrorDialog(context, "Error: ${e.code}");
+                }
+              
               }
               catch (e) {
-                devtools.log("Invalid User");
-                devtools.log(e.toString());
-                devtools.log(e.runtimeType.toString());
+                await showErrorDialog(context, e.toString());
               }
               
               
@@ -87,4 +98,5 @@ class _LoginViewState extends State<LoginView> {
   }
    
 }
+
 
