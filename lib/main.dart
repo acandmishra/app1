@@ -1,3 +1,4 @@
+import 'package:app1/constants/routes.dart';
 import 'package:app1/firebase_options.dart';
 import 'package:app1/views/register_view.dart';
 import 'package:app1/views/login_view.dart';
@@ -17,9 +18,9 @@ void main() {
       ),
       home: const HomePage(),
       routes:{
-        "/login/": (context) => const LoginView(),
-        "/register/": (context) => const RegisterView(),
-        "/notes/": (context) => const NotesView(),
+        loginRoute: (context) => const LoginView(),
+        registerRoute: (context) => const RegisterView(),
+        notesRoute: (context) => const NotesView(),
       }
     ));
 }
@@ -87,11 +88,11 @@ class _NotesViewState extends State<NotesView> {
         PopupMenuButton<MenuAction>(onSelected: (value) async {
           switch(value){
             case(MenuAction.logout):
-              final LoggingOut=await showLogOutDialog(context);
-              devtools.log(LoggingOut.toString());
-              if(LoggingOut){
+              final loggingOut=await showLogOutDialog(context);
+              devtools.log(loggingOut.toString());
+              if(loggingOut){
                 await FirebaseAuth.instance.signOut();
-                Navigator.of(context).pushNamedAndRemoveUntil("/login/", (route) => false);
+                Navigator.of(context).pushNamedAndRemoveUntil(loginRoute, (route) => false);
               }
           }
 

@@ -1,3 +1,4 @@
+import 'package:app1/constants/routes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'dart:developer' as devtools show log;
@@ -57,7 +58,7 @@ class _RegisterViewState extends State<RegisterView> {
                 final userCredential =  await FirebaseAuth.instance.createUserWithEmailAndPassword(
                 email: email,
                 password: password);
-                Navigator.of(context).pushNamedAndRemoveUntil("/login/", (route) => false);
+                Navigator.of(context).pushNamedAndRemoveUntil(loginRoute, (route) => false);
                 devtools.log(userCredential.toString());
               } on FirebaseAuthException catch (e) {
                 if(e.code=="email-already-in-use"){
@@ -72,8 +73,9 @@ class _RegisterViewState extends State<RegisterView> {
               
             },
             child:const Text("Register"),),
+            
             TextButton(onPressed: (){
-              Navigator.of(context).pushNamedAndRemoveUntil("/login/", (route) => false);
+              Navigator.of(context).pushNamedAndRemoveUntil(loginRoute, (route) => false);
             },
             child: const Text("Already Registered? Login Here"),),
         ],
