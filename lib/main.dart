@@ -21,6 +21,7 @@ void main() {
         loginRoute: (context) => const LoginView(),
         registerRoute: (context) => const RegisterView(),
         notesRoute: (context) => const NotesView(),
+        verifyEmailRoute:(context) => const VerifyEmailView(),
       }
     ));
 }
@@ -46,7 +47,7 @@ class HomePage extends StatelessWidget {
                   }
                 }
                 else{
-                  return const LoginView();
+                  return const RegisterView();
                 }
                 
                 // if (user?.emailVerified ?? false) {
@@ -95,7 +96,7 @@ class _NotesViewState extends State<NotesView> {
                 Navigator.of(context).pushNamedAndRemoveUntil(loginRoute, (route) => false);
               }
           }
-          
+
             devtools.log(value.toString()); // log is used instead of print command
         }, itemBuilder: (context) {
           return const [PopupMenuItem<MenuAction>(

@@ -1,4 +1,5 @@
 import 'package:app1/constants/routes.dart';
+import 'package:app1/utilities/show_error_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'dart:developer' as devtools show log;
@@ -13,7 +14,7 @@ class RegisterView extends StatefulWidget {
 
 class _RegisterViewState extends State<RegisterView> {
   late final TextEditingController _email;
-   late final TextEditingController _password;
+  late final TextEditingController _password;
 
    @override
   void initState() {    // this function is used here to assign the values to the late variables
@@ -32,7 +33,8 @@ class _RegisterViewState extends State<RegisterView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title:const Center(child: Text("Registeration Window"))),
+      resizeToAvoidBottomInset: false,
+      appBar: AppBar(title:const Center(child: Text("Register"))),
       body: Column(
         children: [
           TextField(
@@ -58,19 +60,27 @@ class _RegisterViewState extends State<RegisterView> {
                 final userCredential =  await FirebaseAuth.instance.createUserWithEmailAndPassword(
                 email: email,
                 password: password);
-                Navigator.of(context).pushNamedAndRemoveUntil(loginRoute, (route) => false);
+                final user=FirebaseAuth.instance.currentUser;
+                user?.sendEmailVerification();
+                Navigator.of(context).pushNamed(verifyEmailRoute);
                 devtools.log(userCredential.toString());
               } on FirebaseAuthException catch (e) {
                 if(e.code=="email-already-in-use"){
-                  devtools.log("An account exists with this email id , pls login!!");
+                  await showErrorDialog(context, "Already Registered!");
                 }
                 else if (e.code=="weak-password"){
-                  devtools.log("Weak-Password");
+                 await showErrorDialog(context,"Weak Password");
                 }
                 else if(e.code=="invalid-email"){
-                  devtools.log("Invalid email");
+                  await showErrorDialog(context,"Invalid Email ID");
+                }
+                else{
+                  await showErrorDialog(context, "Error: ${e.code}");
                 }
                 
+              }
+              catch (e){
+                await showErrorDialog(context,e.toString());
               }
     
               
