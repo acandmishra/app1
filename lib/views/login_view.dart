@@ -58,32 +58,40 @@ class _LoginViewState extends State<LoginView> {
             onPressed: () async {
               final email = _email.text;
               final password = _password.text;
+              final user =FirebaseAuth.instance.currentUser;
               
               try {
-                final userCredential =  await FirebaseAuth.instance.signInWithEmailAndPassword(
-                email: email,
-                password: password);
-              devtools.log(userCredential.toString());
-              Navigator.of(context).pushNamedAndRemoveUntil(notesRoute, (route) => false,);
-              } 
-              on FirebaseAuthException catch (e) { //used to catch specified exception
-                if(e.code=="wrong-password"){
-                  await showErrorDialog(context,"Wrong Password");
-                devtools.log("Failed to authenticate!");
-                devtools.log(password);
-                devtools.log(e.code.toString());}
-                 //to get the error code ie. specific error inside the FirebasAuthException
-                else if (e.code=="user-not-found"){
-                  await showErrorDialog(context,"User Not Found");   
-                }
-                else{
-                  await showErrorDialog(context, "Error: ${e.code}");
-                }
+              final userCredential =  await FirebaseAuth.instance.signInWithEmailAndPassword(
+              email: email,
+              password: password);
+            devtools.log(userCredential.toString());
+            if(user?.emailVerified??false){
+            Navigator.of(context).pushNamedAndRemoveUntil(notesRoute, (route) => false,);
+            }
+            else{
+              Navigator.of(context).pushNamed(verifyEmailRoute);
+            }
+            } 
+            on FirebaseAuthException catch (e) { //used to catch specified exception
+              if(e.code=="wrong-password"){
+                await showErrorDialog(context,"Wrong Password");
+              devtools.log("Failed to authenticate!");
+              devtools.log(password);
+              devtools.log(e.code.toString());}
+                //to get the error code ie. specific error inside the FirebasAuthException
+              else if (e.code=="user-not-found"){
+                await showErrorDialog(context,"User Not Found");   
+              }
+              else{
+                await showErrorDialog(context, "Error: ${e.code}");
+              }
+            
+            }
+            catch (e) {
+              await showErrorDialog(context, e.toString());
+            }
               
-              }
-              catch (e) {
-                await showErrorDialog(context, e.toString());
-              }
+              
               
               
               
