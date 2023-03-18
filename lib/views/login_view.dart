@@ -76,7 +76,6 @@ class _LoginViewState extends State<LoginView> {
               if(e.code=="wrong-password"){
                 await showErrorDialog(context,"Wrong Password");
               devtools.log("Failed to authenticate!");
-              devtools.log(password);
               devtools.log(e.code.toString());}
                 //to get the error code ie. specific error inside the FirebasAuthException
               else if (e.code=="user-not-found"){
