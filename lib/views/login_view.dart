@@ -59,13 +59,14 @@ class _LoginViewState extends State<LoginView> {
             onPressed: () async {
               final email = _email.text;
               final password = _password.text;
-              final user =AuthService.firebase().currentUser;
+              
               
             try {
               final userCredential =  await AuthService.firebase().logIn(
               email: email,
               password: password);
               devtools.log(userCredential.toString());
+              final user =AuthService.firebase().currentUser;
               if(user?.isEmailVerified??false){
                 Navigator.of(context).pushNamedAndRemoveUntil(notesRoute, (route) => false,);
               }
@@ -85,10 +86,11 @@ class _LoginViewState extends State<LoginView> {
 
             },
             child:const Text("Login"),),
+
             TextButton(onPressed:() {
-            Navigator.of(context).pushNamedAndRemoveUntil(registerRoute, (route) => false);
+              Navigator.of(context).pushNamedAndRemoveUntil(registerRoute, (route) => false);
           },
-           child: const Text("Register Here"),)
+            child: const Text("Register Here"),)
         ],
          ),
      );

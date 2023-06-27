@@ -5,7 +5,7 @@ import 'package:app1/views/register_view.dart';
 import 'package:app1/views/login_view.dart';
 import 'package:app1/views/verify_email_view.dart';
 import 'package:flutter/material.dart';
-import 'dart:developer' as devtools show log;
+// import 'dart:developer' as devtools show log;
 
 
 void main() {

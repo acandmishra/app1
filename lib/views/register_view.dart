@@ -17,7 +17,7 @@ class _RegisterViewState extends State<RegisterView> {
   late final TextEditingController _email;
   late final TextEditingController _password;
 
-   @override
+  @override
   void initState() {    // this function is used here to assign the values to the late variables
     _email = TextEditingController();
     _password = TextEditingController();
@@ -34,7 +34,6 @@ class _RegisterViewState extends State<RegisterView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       appBar: AppBar(title:const Center(child: Text("Register"))),
       body: Column(
         children: [
@@ -61,7 +60,7 @@ class _RegisterViewState extends State<RegisterView> {
                 final userCredential =  await AuthService.firebase().createUser(
                 email: email,
                 password: password);
-                final user=AuthService.firebase().currentUser;
+                
                 AuthService.firebase().sendEmailVerification();
                 Navigator.of(context).pushNamed(verifyEmailRoute);
                 devtools.log(userCredential.toString());
