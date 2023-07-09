@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'dart:developer' as devtools show log;
 import '../constants/routes.dart';
 import '../enums/menu_actions.dart';
+import '../services/crud/notes_services.dart';
 
 class NotesView extends StatefulWidget {
   const NotesView({super.key});
@@ -12,6 +13,30 @@ class NotesView extends StatefulWidget {
 }
 
 class _NotesViewState extends State<NotesView> {
+  // below is instance of NotesService so that notes view can use its functionalities
+  late final NotesService _notesService;
+
+  String get userEmail => AuthService.firebase().currentUser!.email!;
+
+
+  // To open the database as we log in into the main ui
+  @override
+  void initState() {
+    _notesService=NotesService();
+    // this was needed before:-
+    // _notesService.open();
+    // nothing is needed now as we have given logic to check if database is open or not and create in negation
+    // to function in notesService
+    super.initState();
+  }
+
+// To close the data base as soon as we go out of main ui
+  @override
+  void dispose() {
+    _notesService.close();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,6 +62,27 @@ class _NotesViewState extends State<NotesView> {
           
         },)
       ]),
+      body: FutureBuilder(
+        future: _notesService.getOrCreateUser(email: userEmail),
+        builder:(context, snapshot) {
+          switch(snapshot.connectionState) {
+            case ConnectionState.done:
+              return StreamBuilder(
+                stream: _notesService.allNotes,
+                builder:(context,snapshot){
+                  switch(snapshot.connectionState){
+                    case ConnectionState.waiting:
+                      return const Text("Loading...");
+                    default:
+                      return const CircularProgressIndicator();
+                  }
+                });
+            default:
+              return const CircularProgressIndicator();
+
+          }
+        },
+      ),
     );
   }
 }
