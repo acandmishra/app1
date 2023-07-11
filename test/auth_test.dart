@@ -132,7 +132,10 @@ class MockAuthProvider implements AuthProvider{
       if (!isInitialized) throw NotInitializedException();
       if (email == "acand@mishra.com") throw UserNotFoundAuthException();
       if (password == "foobar") throw WrongPasswordAuthException();
-      const user=AuthUser(isEmailVerified: false);
+      const user=AuthUser(
+        isEmailVerified: false,
+        email: 'acand@mishra.com',
+        );
       _user=user;
       return Future.value(user); 
     }
@@ -152,7 +155,10 @@ class MockAuthProvider implements AuthProvider{
     if (user==null) throw UserNotFoundAuthException();
     // we created a completely new user below because it was not possible to change the isEmailVerified: parameter 
     // of original user as once set it can not be changed !! coz AuthUser is immutable
-    const newUser = AuthUser(isEmailVerified: true);
+    const newUser = AuthUser(
+      isEmailVerified: true,
+      email: 'acand@mishra.com',
+      );
     _user=newUser;
 
   }
