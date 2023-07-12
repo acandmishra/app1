@@ -77,7 +77,9 @@ class _NotesViewState extends State<NotesView> {
                 stream: _notesService.allNotes,
                 builder:(context,snapshot){
                   switch(snapshot.connectionState){
+                    // Below is implicit fall through ie. both the below cases will return same widget
                     case ConnectionState.waiting:
+                    case ConnectionState.active:
                       return const Text("Loading...");
                     default:
                       return const CircularProgressIndicator();

@@ -14,7 +14,9 @@ void main() {
   runApp(MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.pink,
+        dialogBackgroundColor: Colors.blueGrey,
+        scaffoldBackgroundColor: Color.fromARGB(253, 255, 255, 255),
       ),
       home: const HomePage(),
       routes:{

@@ -87,7 +87,7 @@ class NotesService{
     final notes = await db.query(
       noteTable,
       limit:1,
-      where:"note =?",
+      where:'note =?',
       whereArgs:[id],
       );
     if (notes.isEmpty){
@@ -115,7 +115,7 @@ class NotesService{
     final db=_getDatabaseOrThrow();
     final deleteCount=await db.delete(
       noteTable,
-      where:"id=?",
+      where:'id=?',
       whereArgs:[id],
     );
     if(deleteCount==0){
@@ -134,7 +134,7 @@ class NotesService{
     final db=_getDatabaseOrThrow();
     final dbUser = await getUser(email: owner.email);
     // using the equality operator we made to check if both users have everything same or not, ie. it exists already or not!
-    if (dbUser !=owner){
+    if (dbUser != owner){
     throw CouldNotFindUserException();
     }
     const text="";
@@ -161,7 +161,7 @@ class NotesService{
     final result=await db.query(
       userTable,
       limit:1,
-      where:"email=?",
+      where:'email=?',
       whereArgs:[email.toLowerCase()],
       );
     if(result.isEmpty){
@@ -177,7 +177,7 @@ class NotesService{
     final result=await db.query(
       userTable,
       limit:1,
-      where:"email=?",
+      where:'email = ?',
       whereArgs: [email.toLowerCase()],
       );
     if(result.isNotEmpty){
@@ -200,7 +200,7 @@ class NotesService{
     final db=_getDatabaseOrThrow();
     final deleteCount=await db.delete(
       userTable,
-      where:"email=?",
+      where:'email = ?',
       whereArgs:[email.toLowerCase()],
     );
     if(deleteCount!=1){
@@ -251,6 +251,7 @@ Future<void>  _ensureDBIsOpen()async{
         await db.execute(createUserTable);
 
         await db.execute(createNotesTable);
+
         // Caching all notes from database
         await _cacheNotes();
         
@@ -326,11 +327,13 @@ const emailColumn="email";
 const userIdColumn="user_id";
 const textColumn="text";
 const isSyncedWithCloudColumn="is_synced_with_server";
-const createUserTable = """ CREATE TABLE IF NOT EXISTS "user" (
+
+const createUserTable ="""CREATE TABLE if not exists "user" (
 	"id"	INTEGER NOT NULL UNIQUE,
-	"email id"	TEXT NOT NULL UNIQUE,
+	"email"	TEXT NOT NULL UNIQUE,
 	PRIMARY KEY("id" AUTOINCREMENT)
-);""";
+)""";
+
 const createNotesTable =""" CREATE TABLE IF NOT EXISTS "notes" (
 	"id"	INTEGER NOT NULL,
 	"user_id"	INTEGER NOT NULL,
