@@ -56,6 +56,7 @@ void _setupTextControllerListener(){
     final note = _note;
     if (_textController.text.isEmpty && note !=null){
       _notesService.deleteNote(id: note.id);
+      print("Note Deleted");
     }
   }
 
@@ -67,6 +68,7 @@ void _setupTextControllerListener(){
         note: note,
         text: text
       );
+    print("Note Updated");
     }
   }
 
@@ -74,17 +76,21 @@ void _setupTextControllerListener(){
 @override
   void initState() {
     _notesService = NotesService();
+    print("DB opened");
     _textController = TextEditingController();
     super.initState();
   }
 
-  @override
+
+
+@override
   void dispose() {
-    _deleteNoteIfTextIsEmpty();
     _saveNoteIfTextNotEmpty();
+    _deleteNoteIfTextIsEmpty();
     _textController.dispose();
     super.dispose();
   }
+
 
   @override
   Widget build(BuildContext context) {

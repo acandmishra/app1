@@ -30,12 +30,15 @@ class _NotesViewState extends State<NotesView> {
     super.initState();
   }
 
-// To close the data base as soon as we go out of main ui
-  @override
-  void dispose() {
-    _notesService.close();
-    super.dispose();
-  }
+// The dispose function (earlier here as uncommented) is deleted as it was used to close the database upon exiting the newnotes view...
+//  but as we converted our notes service into a singleton , it returns the same instance again and again and thereofre,
+//  it is imortant to keep it open 
+
+  // @override
+  // void dispose() {
+  //   _notesService.close();
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -80,13 +83,36 @@ class _NotesViewState extends State<NotesView> {
                     // Below is implicit fall through ie. both the below cases will return same widget
                     case ConnectionState.waiting:
                     case ConnectionState.active:
-                      return const Text("Loading...");
+                      if (snapshot.hasData){
+                        final allNotes = snapshot.data;
+                        print("this is the info of current note $allNotes");
+                        return ListView.builder(
+                          itemCount: allNotes!.length,
+                          itemBuilder:(context, index) {
+                            return ListTile(
+                              title: Text(
+                                allNotes[index].text,
+                                maxLines: 1,
+                                softWrap: true,
+                                overflow: TextOverflow.ellipsis,
+                                textScaleFactor: 1.5,
+                              ),
+                              
+                              
+                            );
+                          },
+
+                        );
+                      }
+                      else{
+                        return Center(child: CircularProgressIndicator(color: Color.fromARGB(255, 0, 255, 128),));
+                      }
                     default:
-                      return const CircularProgressIndicator();
+                      return Center(child: const CircularProgressIndicator());
                   }
                 });
             default:
-              return const CircularProgressIndicator();
+              return Center(child: const CircularProgressIndicator());
 
           }
         },

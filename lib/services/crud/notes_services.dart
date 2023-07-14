@@ -13,15 +13,21 @@ class NotesService{
   Database? _db;
   List <DatabaseNote> _notes = [];
 
-
+  // Below code line is to convert the NoteService into singleton .... calling to class multiple times will return the same instance 
   static final NotesService _shared =NotesService._sharedInstance(); // 2) the call then comes from 1 to here and private constructor is called
-  NotesService._sharedInstance(); // 3) finally the call comes here to create an instance 
+  NotesService._sharedInstance(){
+    _notesStreamController=StreamController<List<DatabaseNote>>.broadcast(
+      onListen:(){
+        _notesStreamController.sink.add(_notes);    
+      }
+    );
+  } // 3) finally the call comes here to create an instance 
   factory NotesService() => _shared; // 1) call to NotesService will first come here and the private instance gets called
 
 
 
-  final _notesStreamController = 
-  StreamController<List<DatabaseNote>>.broadcast();
+  late final _notesStreamController;
+  
   
   // the below code will help to retrieve all notes of a user
   Stream<List<DatabaseNote>> get allNotes => _notesStreamController.stream;
@@ -54,10 +60,12 @@ class NotesService{
 
     await getNote(id: note.id);
 
-    final updateCount=await db.update(noteTable,{
+    final updateCount=await db.update(
+      noteTable,{
       textColumn:text,
       isSyncedWithCloudColumn:0,
-    });
+      },
+    );
     if (updateCount==0){
       throw CouldNotUpdateNote();
     }
@@ -87,7 +95,7 @@ class NotesService{
     final notes = await db.query(
       noteTable,
       limit:1,
-      where:'note =?',
+      where:'id = ?',
       whereArgs:[id],
       );
     if (notes.isEmpty){
@@ -101,6 +109,7 @@ class NotesService{
     return note;
   }
 
+
   Future<int> deleteAllNotes() async{
     await _ensureDBIsOpen();
     final db=_getDatabaseOrThrow();
@@ -110,12 +119,14 @@ class NotesService{
     return rowsdeleted;
     }
 
+
+
   Future<void> deleteNote({required int id})async{
     await _ensureDBIsOpen();
     final db=_getDatabaseOrThrow();
     final deleteCount=await db.delete(
       noteTable,
-      where:'id=?',
+      where:'id = ?',
       whereArgs:[id],
     );
     if(deleteCount==0){
@@ -126,8 +137,8 @@ class NotesService{
       _notesStreamController.add(_notes);                
     }
     
-
   }
+
 
   Future<DatabaseNote> createNote({required DatabaseUser owner})async {
     await _ensureDBIsOpen();
@@ -161,7 +172,7 @@ class NotesService{
     final result=await db.query(
       userTable,
       limit:1,
-      where:'email=?',
+      where:'email = ?',
       whereArgs:[email.toLowerCase()],
       );
     if(result.isEmpty){
@@ -169,6 +180,7 @@ class NotesService{
     }
     return DatabaseUser.fromRow(result.first);
   }
+
 
   Future<DatabaseUser>createUser({required String email})async{
     await _ensureDBIsOpen();
@@ -194,6 +206,8 @@ class NotesService{
       email: email,
       );
   }
+
+
 
   Future<void> deleteUser({required String email})async{
     await _ensureDBIsOpen();
@@ -230,7 +244,7 @@ class NotesService{
     }
   }
 
-Future<void>  _ensureDBIsOpen()async{
+Future<void> _ensureDBIsOpen()async{
   try{
     await open();
   } on DatabaseAlreadyOpenException {
@@ -244,9 +258,11 @@ Future<void>  _ensureDBIsOpen()async{
       }
       try{
         final docsPath = await getApplicationDocumentsDirectory();
-        final dbPath=join(docsPath.path,dbName); //joining name of db to the path of docs folder of app1
+        final dbPath=join(docsPath.path,dbName);
+        //joining name of db to the path of docs folder of app1
         final db=await openDatabase(dbPath);
         _db=db;
+        
 
         await db.execute(createUserTable);
 
@@ -319,26 +335,26 @@ class DatabaseNote{
 
 
 
-const dbName="notes.db";
-const noteTable="note";
-const userTable="user";
+const dbName="Notes.db";
+const noteTable="notes";
+const userTable="users";
 const idColumn="id";
 const emailColumn="email";
 const userIdColumn="user_id";
 const textColumn="text";
 const isSyncedWithCloudColumn="is_synced_with_server";
 
-const createUserTable ="""CREATE TABLE if not exists "user" (
+const createUserTable ="""CREATE TABLE IF NOT EXISTS "users" (
 	"id"	INTEGER NOT NULL UNIQUE,
 	"email"	TEXT NOT NULL UNIQUE,
 	PRIMARY KEY("id" AUTOINCREMENT)
 )""";
 
-const createNotesTable =""" CREATE TABLE IF NOT EXISTS "notes" (
+const createNotesTable ="""CREATE TABLE IF NOT EXISTS "notes" (
 	"id"	INTEGER NOT NULL,
 	"user_id"	INTEGER NOT NULL,
 	"text"	TEXT,
 	"is_synced_with_server"	INTEGER NOT NULL DEFAULT 0,
 	FOREIGN KEY("user_id") REFERENCES "user"("id"),
 	PRIMARY KEY("id" AUTOINCREMENT)
-);""";
+)""";
