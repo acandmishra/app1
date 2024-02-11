@@ -1,9 +1,11 @@
 import 'package:app1/constants/routes.dart';
 import 'package:app1/services/auth/auth_exceptions.dart';
 import 'package:app1/services/auth/auth_service.dart';
+import 'package:app1/utilities/dialogs/error_dialogs.dart';
 import 'package:flutter/material.dart';
 import 'dart:developer' as devtools show log;
-import '../utilities/show_error_dialog.dart';
+// This below import was used before refactoring our error dialog file
+// import '../utilities/show_error_dialog.dart';
 
 
 

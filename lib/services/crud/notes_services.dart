@@ -79,11 +79,13 @@ class NotesService{
     }
   }
 
-  Future <Iterable<DatabaseNote>> getAllNotes()async{
+  Future <Iterable<DatabaseNote>> getAllNotes({required email})async{
     await _ensureDBIsOpen();
     final db=_getDatabaseOrThrow();
     final notes = await db.query(
       noteTable,
+      where:"userId = ?",
+      whereArgs: [email],
       );
     return notes.map((notesRow) => DatabaseNote.fromRow(notesRow));
 

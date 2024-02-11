@@ -1,4 +1,5 @@
 import 'package:app1/services/auth/auth_service.dart';
+import 'package:app1/utilities/dialogs/logout_dialog.dart';
 import 'package:flutter/material.dart';
 import 'dart:developer' as devtools show log;
 import '../../constants/routes.dart';
@@ -86,23 +87,7 @@ class _NotesViewState extends State<NotesView> {
                       if (snapshot.hasData){
                         final allNotes = snapshot.data;
                         print("this is the info of current note $allNotes");
-                        return ListView.builder(
-                          itemCount: allNotes!.length,
-                          itemBuilder:(context, index) {
-                            return ListTile(
-                              title: Text(
-                                allNotes[index].text,
-                                maxLines: 1,
-                                softWrap: true,
-                                overflow: TextOverflow.ellipsis,
-                                textScaleFactor: 1.5,
-                              ),
-                              
-                              
-                            );
-                          },
-
-                        );
+                        
                       }
                       else{
                         return Center(child: CircularProgressIndicator(color: Color.fromARGB(255, 0, 255, 128),));
@@ -121,19 +106,25 @@ class _NotesViewState extends State<NotesView> {
   }
 }
 
-  Future<bool>showLogOutDialog(BuildContext context){
-  return showDialog<bool>(context: context, builder: (context){
-    return AlertDialog(
-      title:const Text("Sign Out"),
-      content:const Text("Confirm Sign Out?"),
-      actions:[
-        TextButton(onPressed: (){
-          Navigator.of(context).pop(false);
-        }, child: const Text("Cancel")),
-        TextButton(onPressed: (){
-          Navigator.of(context).pop(true);
-        }, child: const Text("Sign Out"))
-      ]
-    );
-  }).then((value) => value ?? false);
-}
+
+
+
+// THE CODE BELOW IS DELETED 
+// WE ARE GOING TO MAKE GENERIC FUNCTION ABOVE FOR ALL THE DIALOG BOXES IN THE APPLICATION
+
+//   Future<bool>showLogOutDialog(BuildContext context){
+//   return showDialog<bool>(context: context, builder: (context){
+//     return AlertDialog(
+//       title:const Text("Sign Out"),
+//       content:const Text("Confirm Sign Out?"),
+//       actions:[
+//         TextButton(onPressed: (){
+//           Navigator.of(context).pop(false);
+//         }, child: const Text("Cancel")),
+//         TextButton(onPressed: (){
+//           Navigator.of(context).pop(true);
+//         }, child: const Text("Sign Out"))
+//       ]
+//     );
+//   }).then((value) => value ?? false);
+// }

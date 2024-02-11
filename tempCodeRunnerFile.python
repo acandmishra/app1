@@ -1,0 +1,17 @@
+from sympy import *
+
+x=symbols("x")
+
+function=(x**3)+(x**2)+(3*x)+4
+derivative=diff(function,x)
+E=0.01
+xi=-1.75
+
+while True:
+    X=0
+    X=xi-(function.subs(x,xi)/derivative.subs(x,xi))
+    Error=abs(X-xi)
+    if(Error<=E):
+        print(f"root is{X}")
+        exit(0)
+    xi=X  

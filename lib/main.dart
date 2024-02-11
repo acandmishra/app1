@@ -15,7 +15,7 @@ void main() {
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.pink,
-        dialogBackgroundColor: Colors.blueGrey,
+        dialogBackgroundColor: Color.fromARGB(255, 255, 255, 255),
         scaffoldBackgroundColor: Color.fromARGB(253, 255, 255, 255),
       ),
       home: const HomePage(),
